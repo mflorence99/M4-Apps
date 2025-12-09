@@ -40,14 +40,14 @@
 //	PORT_Type). This requires a small (as in memory) overhead to implement, but
 //	it does make the logic more complicated, because we need to keep track of
 //	the last 32-bit value written to these write-only port registers.
-package driver // import "tinygo.org/x/drivers/rgb75"
+package rgb75 // import "tinygo.org/x/drivers/rgb75"
 
 import (
 	"errors"
 	"image/color"
 	"machine"
 
-	"rgb75/driver/native"
+	"m4-apps/rgb75/native"
 )
 
 var (
