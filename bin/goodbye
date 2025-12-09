@@ -1,0 +1,1 @@
+(cd ../src/goodbye && tinygo build -target=matrixportal-m4 -o ../../bin/goodbye.uf2)
