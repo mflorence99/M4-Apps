@@ -47,7 +47,7 @@ import (
 	"image/color"
 	"machine"
 
-	"m4-apps/rgb75/native"
+	"m4-apps/lib/rgb75/native"
 )
 
 var (
