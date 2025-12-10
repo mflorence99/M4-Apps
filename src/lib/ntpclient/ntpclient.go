@@ -27,7 +27,7 @@ const NTP_PACKET_SIZE = 48
 
 var response = make([]byte, NTP_PACKET_SIZE)
 
-// 🟧 Synchronize system time with NPT
+// 🟧 Synchronize system time with NTP
 
 func SyncSystemTime(ntpHost string) {
 
