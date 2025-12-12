@@ -3,46 +3,79 @@ package main
 import (
 	_ "embed"
 	"image/color"
-	"machine"
 	"time"
 
-	"m4-apps/lib/ntpclient"
+	"m4-apps/lib/ntp"
 	"m4-apps/lib/rgb75"
+	"m4-apps/lib/utils"
+	"m4-apps/lib/wifi"
 
 	"tinygo.org/x/tinyfont"
 	"tinygo.org/x/tinyfont/proggy"
 )
 
+var colors = []color.RGBA{
+	{255, 0, 0, 255},
+	{255, 255, 0, 255},
+	{0, 255, 0, 255},
+	{0, 255, 255, 255},
+	{0, 0, 255, 255},
+	{255, 0, 255, 255},
+	{255, 255, 255, 255},
+}
+
+// 🟧 Display date/time synchronized by NTP
+
 func main() {
 
-	for !machine.Serial.DTR() {
-		time.Sleep(100 * time.Millisecond)
+	var err error
+	var font = &proggy.TinySZ8pt7b
+	var lastSyncd time.Time
+	var syncd bool
+
+	// 👇 noop in production
+	utils.WaitForSerial()
+
+	// 👇 connect to Wifi
+	w := wifi.NewWifi()
+	err = w.Connect()
+	if err != nil {
+		println("🔥 Wifi connection failed", err.Error())
+		panic(err)
 	}
 
-	ntpclient.SyncSystemTime("0.pool.ntp.org:123")
+	// 👇 ...and disconnect when we're done
+	defer w.Disconnect()
 
-	device := rgb75.NewDevice()
+	// 👇 prepare matrix display
+	d := rgb75.NewDevice()
 
-	colors := []color.RGBA{
-		{255, 0, 0, 255},
-		{255, 255, 0, 255},
-		{0, 255, 0, 255},
-		{0, 255, 255, 255},
-		{0, 0, 255, 255},
-		{255, 0, 255, 255},
-		{255, 255, 255, 255},
-	}
-
+	// 👇 need to continually refresh display
 	for {
 
+		// 👇 resync clock with NTP every hour
+		if !syncd || time.Since(lastSyncd).Minutes() > 10 {
+			err := ntp.SyncSystemTime()
+			if err != nil {
+				println("🔥 SyncSystemTime failed", err.Error())
+			} else {
+				println("🐞 system time synchronized", time.Now().String())
+			}
+			// 👇 setup
+			syncd = true
+			lastSyncd = time.Now()
+		}
+
+		// TODO 🔥 HACK: PST only as TZ and ignoring DST
 		pst := time.FixedZone("PST", -8*60*60)
 		t := time.Now().In(pst)
 
-		tinyfont.WriteLine(device, &proggy.TinySZ8pt7b, 15, 12, t.Format("Jan 2"), colors[4])
-		tinyfont.WriteLineColors(device, &proggy.TinySZ8pt7b, 2, 26, t.Format("3:04:05pm"), colors)
+		// 👇 finally!
+		tinyfont.WriteLineColors(d, font, 15, 12, t.Format("Jan 2"), colors)
+		tinyfont.WriteLineColors(d, font, 2, 26, t.Format("3:04:05pm"), colors)
+		d.Display()
 
-		device.Display()
-
+		// 👇 take a beat to minimize any flicker
 		time.Sleep(1 * time.Millisecond)
 	}
 

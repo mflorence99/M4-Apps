@@ -40,6 +40,9 @@
 //	PORT_Type). This requires a small (as in memory) overhead to implement, but
 //	it does make the logic more complicated, because we need to keep track of
 //	the last 32-bit value written to these write-only port registers.
+
+// 👁️ https://github.com/ardnew/drivers/blob/4d37c02b0af293e9ea91ddda4033fa8d8451d927/rgb75/rgb75.go
+
 package rgb75 // import "tinygo.org/x/drivers/rgb75"
 
 import (
