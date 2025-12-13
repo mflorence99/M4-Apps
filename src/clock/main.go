@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"image/color"
 	"time"
 
 	"m4-apps/lib/ntp"
@@ -13,16 +12,6 @@ import (
 	"tinygo.org/x/tinyfont"
 	"tinygo.org/x/tinyfont/proggy"
 )
-
-var colors = []color.RGBA{
-	{255, 0, 0, 255},
-	{255, 255, 0, 255},
-	{0, 255, 0, 255},
-	{0, 255, 255, 255},
-	{0, 0, 255, 255},
-	{255, 0, 255, 255},
-	{255, 255, 255, 255},
-}
 
 // 🟧 Display date/time synchronized by NTP
 
@@ -71,8 +60,8 @@ func main() {
 		t := time.Now().In(pst)
 
 		// 👇 finally!
-		tinyfont.WriteLineColors(d, font, 15, 12, t.Format("Jan 2"), colors)
-		tinyfont.WriteLineColors(d, font, 2, 26, t.Format("3:04:05pm"), colors)
+		tinyfont.WriteLineColors(d, font, 15, 12, t.Format("Jan 2"), utils.Colors)
+		tinyfont.WriteLineColors(d, font, 2, 26, t.Format("3:04:05pm"), utils.Colors)
 		d.Display()
 
 		// 👇 take a beat to minimize any flicker

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"image/color"
 	"m4-apps/lib/rgb75"
+	"m4-apps/lib/utils"
 	"time"
 
 	"tinygo.org/x/tinyfont"
@@ -13,19 +13,9 @@ func main() {
 
 	device := rgb75.NewDevice()
 
-	colors := []color.RGBA{
-		{255, 0, 0, 255},
-		{255, 255, 0, 255},
-		{0, 255, 0, 255},
-		{0, 255, 255, 255},
-		{0, 0, 255, 255},
-		{255, 0, 255, 255},
-		{255, 255, 255, 255},
-	}
-
 	for {
-		tinyfont.WriteLine(device, &freesans.Regular9pt7b, 12, 14, "Hello", colors[4])
-		tinyfont.WriteLineColors(device, &freesans.Regular9pt7b, 2, 28, "Buster!", colors)
+		tinyfont.WriteLine(device, &freesans.Regular9pt7b, 12, 14, "Hello", utils.Colors[4])
+		tinyfont.WriteLineColors(device, &freesans.Regular9pt7b, 2, 28, "Buster!", utils.Colors)
 
 		device.Display()
 
