@@ -14,7 +14,7 @@ import (
 
 var emoji = notoemoji.NotoEmojiRegular12pt
 var font = freesans.BoldOblique12pt7b
-var msg = "Ho ho ho! ⭐⭐⭐ Merry Christmas! ❤ ❤ ❤"
+var msg = "❤ ❤ ❤ Boohoo! Bye bye, Ange! Lovely holiday for all of us! Come back again! ❤ ❤ ❤"
 var msgColors = make([]color.RGBA, len(msg))
 var _, lineWidth = tinyfont.LineWidth(&font, msg)
 

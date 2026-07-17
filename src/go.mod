@@ -1,6 +1,6 @@
 module m4-apps
 
-go 1.25.4
+go 1.26
 
 require (
 	tinygo.org/x/drivers v0.31.0
